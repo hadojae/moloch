@@ -1,3 +1,5 @@
+#CONFIG FILES ARE MODIFIED FOR REDONION BUILDSCRIPT PURPOSES ONLY
+
 0.11.4 2015/03/--
   - NOTICE: db.pl upgrade is required
   - NOTICE: Only ES 1.4.x is supported by this version. 
