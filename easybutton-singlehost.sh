@@ -106,14 +106,7 @@ if [ "x$https_proxy" != "x" ]; then
     sleep 1
 fi
 
-echo -n "Use pfring? ('yes' enables) [no] "
-read USEPFRING
-PFRING=""
-if [ -n "$USEPFRING" -a "x$USEPFRING" = "xyes" ]; then 
-    echo "MOLOCH - Using pfring - Make sure to install the kernel modules"
-    sleep 1
-    PFRING="--pfring"
-fi
+PFRING="--pfring"
 
 # Building thirdparty libraries and moloch
 echo ./easybutton-build.sh --dir "$TDIR" $PFRING
@@ -219,7 +212,7 @@ fi
 
 
 
-echo -n "Memory to give to elasticsearch, box MUST have more then this available: [512M] "
+#echo -n "Memory to give to elasticsearch, box MUST have more then this available: [512M] "
 read ESMEM
 if [ -z $ESMEM ]; then ESMEM="512M"; fi
 

@@ -16,8 +16,8 @@ PCAP=1.7.2
 NIDS=1.24
 PFRING=6.0.2
 
-TDIR="/data/moloch"
-DOPFRING=0
+TDIR=CHANGEME
+DOPFRING=1
 
 while :
 do
@@ -137,35 +137,15 @@ else
 fi
 
 if [ $DOPFRING -eq 1 ]; then
-    # pfring
-    echo "MOLOCH: Building libpcap with pfring";
-    if [ ! -f "PF_RING-$PFRING.tar.gz" ]; then
-      wget -O PF_RING-$PFRING.tar.gz http://sourceforge.net/projects/ntop/files/PF_RING/PF_RING-$PFRING.tar.gz/download
-    fi
-    tar zxf PF_RING-$PFRING.tar.gz
-    (cd PF_RING-$PFRING; $MAKE)
-    if [ $? -ne 0 ]; then
-      echo "MOLOCH: pfring failed to build"
-      exit 1
-    fi
 
-    PFRINGDIR=`pwd`/PF_RING-$PFRING
-    PCAPDIR=$PFRINGDIR/userland/libpcap
+    PFRINGDIR=CHANGEME
+    PCAPDIR=CHANGEME
     PCAPBUILD="--with-pfring=$PFRINGDIR"
+
 else
-    echo "MOLOCH: Building libpcap without pfring";
-    # libpcap
-    if [ ! -f "libpcap-$PCAP.tar.gz" ]; then
-      wget http://www.tcpdump.org/release/libpcap-$PCAP.tar.gz
-    fi
-    tar zxf libpcap-$PCAP.tar.gz
-    (cd libpcap-$PCAP; ./configure --disable-dbus; $MAKE)
-    if [ $? -ne 0 ]; then
-      echo "MOLOCH: $MAKE failed"
-      exit 1
-    fi
-    PCAPDIR=`pwd`/libpcap-$PCAP
-    PCAPBUILD="--with-libpcap=$PCAPDIR"
+
+    echo "We should always be using pfring on this build...the dungeon collapses..."
+    exit 0
 fi
 
 # libnids
