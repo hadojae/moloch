@@ -205,10 +205,11 @@ cd ${INSTALL_DIR}
 PATH=${TDIR}/bin:${PATH}
 $MAKE install
 
-if [ $? -ne 0 ]; then
-  echo "ERROR - '$MAKE install' in moloch directory failed"
-  exit 1
-fi
+#redonion handles this check...it causes the script to stall i think...
+#if [ $? -ne 0 ]; then
+#  echo "ERROR - '$MAKE install' in moloch directory failed"
+#  exit 1
+#fi
 
 
 
