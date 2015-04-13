@@ -65,8 +65,8 @@ which java
 JAVA_VAL=$?
 
 if [ $JAVA_VAL -ne 0 ]; then
-    echo -n "java command not found, real Java 7 is recommended for large install, however would you like to install openjdk 7 now? [yes] "
-    read INSTALLJAVA
+    echo -n "java command not found, real Java 7 is recommended for large install, we are going to install it now."
+    INSTALLJAVA="yes"
     if [ -n "$INSTALLJAVA" -a "x$INSTALLJAVA" != "xyes" ]; then 
         echo "Install java and try again"
         exit
@@ -79,7 +79,7 @@ if [ $JAVA_VAL -ne 0 ]; then
             exit
         fi
     elif [ -f "/etc/redhat-release" ]; then
-        yum install java-1.7.0-openjdk
+        yum install -y java-1.7.0-openjdk
         if [ $? -ne 0 ]; then
             echo "ERROR - 'yum install java-1.7.0-openjdk' failed"
             exit
