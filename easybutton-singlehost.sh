@@ -205,15 +205,11 @@ cd ${INSTALL_DIR}
 PATH=${TDIR}/bin:${PATH}
 $MAKE install
 
-#redonion handles this check...it causes the script to stall i think...
-#if [ $? -ne 0 ]; then
-#  echo "ERROR - '$MAKE install' in moloch directory failed"
-#  exit 1
-#fi
+if [ $? -ne 0 ]; then
+  echo "ERROR - '$MAKE install' in moloch directory failed"
+  exit 1
+fi
 
-
-
-#echo -n "Memory to give to elasticsearch, box MUST have more then this available: [512M] "
 read ESMEM
 if [ -z $ESMEM ]; then ESMEM="512M"; fi
 
