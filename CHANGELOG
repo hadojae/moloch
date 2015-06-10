@@ -1,12 +1,26 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #CONFIG FILES ARE MODIFIED FOR REDONION BUILDSCRIPT PURPOSES ONLY
 
 0.11.4 2015/03/--
 =======
 0.11.5 2015/04/xx
+=======
+0.12.0 2015/06/XX
+  - NOTICE: libcurl (>= 7.21.7) is now required, sorry
+  - capture - http module rewritten to use libcurl, woot!
+  - capture/s3 - S3 traffic now sent over https
+  - viewer - upgraded to DataTables 1.10.7 (issue #379)
+  - viewer - add search to files tab (issue #70)
+  - viewer - handle older indexes without bytes/databytes/packets 
+             per src/dst (issue #396)
+
+0.11.5 2015/06/02
+>>>>>>> 10aa6fcea20e1533565c757cda387d385e4efc00
   - NOTICE: Only ES 1.[45].x is supported by this version. 
             Restart viewer AFTER upgrading ES versions
   - NOTICE: If using multies all viewers must be upgraded at once
+  - NOTICE: Requires running npm update
   - capture - http logs connecting time
   - capture - fix http crash issue
   - capture - compiles on OSX again
@@ -16,6 +30,27 @@
   - viewer - switched from ES facets to ES aggregations
   - viewer - maps support src vs dst now
   - multi - fixed hasheader/tag support
+  - easybutton - ES 1.5.2, node 0.10.38
+  - viewer - Fixed incorrect expression for http.cookie.key
+  - viewer - Added --debug to viewer
+  - viewer - Only keep 10 files on expire instead of 100, delete up to 200 at a time
+  - viewer - Switched hacking viewer 
+  - viewer - Decoding is now handled with node streams which will allow
+             chaining and plugin decoders eventually - npm update required
+  - capture - Added cookie value parsing, default off controled by
+              parseCookieValue (issue #371)
+  - viewer - EXISTS! fixes, tests, and docs (issue #367)
+  - viewer - Reuse Uncompress and Files settings between sessions
+  - viewer - Anonymous users still have a singled saved settings
+  - viewer - Switch actions/views menu to jquery-ContextMenu which looks more like a menu
+  - capture - Handle ASCII formated SMB strings
+  - capture - payload8 wasn't always all 8 bytes
+  - viewer - Initial configration of displayed columns (issue #257)
+  - capture - reenabled ftp/lmtp classify
+  - capture - vnc classify (issue #382)
+  - capture - fixed tcp_flags for netflow (pr #386)
+  - viewer - spiview shows protocols per category (issue #385)
+  - viewer - spiview supports filename (issue #389)
 
 0.11.4 2015/04/08
 >>>>>>> upstream/master

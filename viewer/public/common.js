@@ -98,6 +98,27 @@ function parseUrlParams() {
 
 }
 
+function decodeParam(decodeOptions) {
+  var param = {};
+
+  for (var key in decodeOptions) {
+    if (decodeOptions[key] === true || (typeof decodeOptions[key] === "string" && decodeOptions[key] !== "")) {
+      var parts = key.split(":");
+      if (decodeOptions[parts[0] + ":" + "enabled"] !== true) {
+        continue;
+      }
+      if (!param[parts[0]]) {
+        param[parts[0]] = {};
+      }
+      if (parts[1] === "enabled") {
+        continue;
+      }
+      param[parts[0]][parts[1]] = decodeOptions[key];
+    }
+  }
+  return JSON.stringify(param);
+}
+
 function safeStr(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/\'/g, '&#39;').replace(/\//g, '&#47;');
 }
@@ -106,51 +127,6 @@ function safeStr(str) {
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
-
-// From http://datatables.net/plug-ins/api#fnLengthChange
-$.fn.dataTableExt.oApi.fnLengthChange = function ( oSettings, iDisplay )
-{
-    oSettings._iDisplayLength = iDisplay;
-    oSettings.oApi._fnCalculateEnd( oSettings );
-
-    /* If we have space to show extra rows (backing up from the end point - then do so */
-    if ( oSettings._iDisplayEnd === oSettings.aiDisplay.length )
-    {
-        oSettings._iDisplayStart = oSettings._iDisplayEnd - oSettings._iDisplayLength;
-        if ( oSettings._iDisplayStart < 0 )
-        {
-            oSettings._iDisplayStart = 0;
-        }
-    }
-
-    if ( oSettings._iDisplayLength === -1 )
-    {
-        oSettings._iDisplayStart = 0;
-    }
-
-    oSettings.oApi._fnDraw( oSettings );
-
-    if ( oSettings.aanFeatures.l )
-    {
-        $('select', oSettings.aanFeatures.l).val( iDisplay );
-    }
-};
-
-//From http://datatables.net/plug-ins/sorting
-jQuery.extend( jQuery.fn.dataTableExt.oSort, {
-    "formatted-num-pre": function ( a ) {
-        a = (a==="-") ? 0 : a.replace( /[^\d\-\.]/g, "" );
-        return parseFloat( a );
-    },
-
-    "formatted-num-asc": function ( a, b ) {
-        return a - b;
-    },
-
-    "formatted-num-desc": function ( a, b ) {
-        return b - a;
-    }
-} );
 
 // From http://stackoverflow.com/a/8999941
 (function ($, undefined) {
@@ -317,13 +293,14 @@ $(document).ready(function() {
   $(".expressionsLink").click(function (e) {
     var data;
     if (typeof sessionsTable !== 'undefined') {
-      data = sessionsTable.fnSettings().oApi._fnAjaxParameters(sessionsTable.fnSettings());
+      var info = sessionsTable.page.info();
+      data = [{name: "length", value: info.length}];
     } else {
       data = [];
     }
 
     var params = buildParams();
-    params = $.merge(data, params);
+    params = $.merge(params, data);
 
     var url = $(e.target).attr("href") + "?" + $.param(params);
 
@@ -364,22 +341,23 @@ $(document).ready(function() {
       var type = $('input[name=actions-type]:checked').val();
 
       if (typeof sessionsTable !== 'undefined') {
-        qs = sessionsTable.fnSettings().oApi._fnAjaxParameters(sessionsTable.fnSettings());
+        var info = sessionsTable.page.info();
+        qs = [{name: length, value: info.length}];
         if (type === "all") {
-          updateParam(qs, "iDisplayStart", 0);
-          updateParam(qs, "iDisplayLength", sessionsTable.fnSettings().fnRecordsDisplay());
+          updateParam(qs, "start", 0);
+          updateParam(qs, "length", info.recordsDisplay);
         } else if (type === "opened") {
           ids = [];
           $("tr.opened").each(function(n, nTr) {
-            var rowData = sessionsTable.fnGetData(nTr);
+            var rowData = sessionsTable.row(nTr).data();
             ids.push(rowData.id);
           });
         }
       } else {
         if (type === "visible") {
-          updateParam(qs, "iDisplayLength", $("#actionsForm").data("moloch-visible"));
+          updateParam(qs, "length", $("#actionsForm").data("moloch-visible"));
         } else  {
-          updateParam(qs, "iDisplayLength", $("#actionsForm").data("moloch-all"));
+          updateParam(qs, "length", $("#actionsForm").data("moloch-all"));
         }
       }
       if (type === "opened") {
@@ -438,8 +416,6 @@ $(document).ready(function() {
 
 
   function showActionsDialog(options, cb) {
-    actionsMenu.hide();
-    sessionActionsMenu.hide();
     actionsDialog.set('content.title', options.title);
     if (options.message) {
       $("#actions-message").show();
@@ -501,59 +477,6 @@ $(document).ready(function() {
     actionsDialog.show();
     actionsDialog.molochCb = cb;
   }
-
-  //////////////////////////////////////////////////////////////////////////////////
-  // Sessions Actions Menu
-  //////////////////////////////////////////////////////////////////////////////////
-  var sessionActionsMenu = $('<div/>').qtip({
-    id: "sessionActionsMenu",
-    content: {
-      text: $('#sessionActionsMenu')
-    },
-    position: {
-      my: 'top right',
-      at: 'bottom right',
-      target: "event"
-    },
-    hide: {
-      fixed: true,
-      delay: 300
-    },
-    style: {
-      classes: 'qtip-light qtip-rounded',
-      tip: false
-    },
-    adjust: {
-      screen: true
-    }
-  }).qtip('api');
-
-  $(document).on("mouseover", ".sessionActionsMenu", function (e) {
-    $("#sessionActionsMenu").attr("sessionid", $(e.target).parents("div[sessionid]").attr("sessionid"));
-    sessionActionsMenu.show(e);
-  });
-
-  //////////////////////////////////////////////////////////////////////////////////
-  // Actions Menu
-  //////////////////////////////////////////////////////////////////////////////////
-  var actionsMenu = $('#actionsButton').qtip({
-    id: "actionsMenu",
-    content: {
-      text: $('#actionsMenu')
-    },
-    position: {
-      my: 'top right',
-      at: 'bottom right',
-    },
-    hide: {
-      fixed: true,
-      delay: 300
-    },
-    style: {
-      classes: 'qtip-light qtip-rounded',
-      tip: false
-    }
-  }).qtip('api');
 
   //////////////////////////////////////////////////////////////////////////////////
   // Tags Dialogs
@@ -886,49 +809,8 @@ $(document).ready(function() {
   //////////////////////////////////////////////////////////////////////////////////
   // Views Menu
   //////////////////////////////////////////////////////////////////////////////////
-  var viewsMenu = $('#viewsButton').qtip({
-    id: "viewsMenu",
-    content: {
-      text: $('#viewsMenu')
-    },
-    position: {
-      my: 'top right',
-      at: 'bottom right',
-    },
-    hide: {
-      fixed: true,
-      delay: 300
-    },
-    style: {
-      classes: 'qtip-light qtip-rounded',
-      tip: false
-    },
-    events: {
-      render: function(event, api) {
-        var content = api.elements.content;
-        $('a[exp]', content).qtip({
-          style: {
-            classes: 'qtip-rounded',
-          },
-          show: {
-            delay: 500
-          },
-          position: {
-            my: 'top right',
-            at: 'bottom left'
-          },
-          container: content,
-          content: function (a,b) {
-            return $(this).attr('exp');
-          }
-        });
-      }
-    }
-  }).qtip('api');
-
   $(".viewMenuOption").click(function (e) {
-    viewsMenu.hide();
-    var view = $(e.target).text();
+    var view = $(this).attr("label");
     if (view === "None") {
       if (sessionStorage['moloch-view']) {
         delete sessionStorage['moloch-view'];
@@ -972,9 +854,9 @@ $(document).ready(function() {
     }
 
     if (Array.isArray(field.category)) {
-      return {field: molochexpr, category:field.category};
+      return {field: molochexpr, category:field.category, info: field};
     } else {
-      return {field: molochexpr, category:[field.category]};
+      return {field: molochexpr, category:[field.category], info: field};
     }
   }
 
@@ -984,6 +866,9 @@ $(document).ready(function() {
         var item = items[key];
         if (item.exp) {
           var text = item.value || $(e.target).text().trim();
+          if (item.info.info && item.info.info.type === "integer") {
+            text = text.replace(/,/g, "");
+          }
           if (typeof text == "string" && text.match(/[^\w.]/)) {
             text = '"' + text + '"';
           }
@@ -998,6 +883,10 @@ $(document).ready(function() {
     };
   }
   if ($.contextMenu) {
+
+    //////////////////////////////////////////////////////////////////////////////////
+    // Right Click Menu
+    //////////////////////////////////////////////////////////////////////////////////
     $.contextMenu({
       selector: '.moloch-right-click',
       build: function($trigger, e) {
@@ -1019,8 +908,8 @@ $(document).ready(function() {
         }
         //console.log("text", text, "url", url, "host", host);
         var items = {
-          and: {name: "<b>and</b> " + safeStr(url), exp: "=="},
-          andnot: {name: "<b>and not</b> " + safeStr(url), exp: "!="}
+          and: {name: "<b>and</b> " + safeStr(url), exp: "==", info: info},
+          andnot: {name: "<b>and not</b> " + safeStr(url), exp: "!=", info: info}
         };
 
         for (var key in molochRightClick) {
@@ -1063,8 +952,51 @@ $(document).ready(function() {
         return rightClickCallback(e, items);
       }
     });
-  }
 
+    //////////////////////////////////////////////////////////////////////////////////
+    // Actions Menu
+    //////////////////////////////////////////////////////////////////////////////////
+    $.contextMenu({
+      selector: '#actionsButton',
+      trigger: "hover",
+      items: $.contextMenu.fromMenu($('#actionsMenu')),
+      zIndex: 10
+    });
+
+    //////////////////////////////////////////////////////////////////////////////////
+    // Session Actions Menu
+    //////////////////////////////////////////////////////////////////////////////////
+    $.contextMenu({
+      selector: '.sessionActionsMenu',
+      trigger: "hover",
+      items: $.contextMenu.fromMenu($('#sessionActionsMenu')),
+      zIndex: 10
+    });
+
+    //////////////////////////////////////////////////////////////////////////////////
+    // Views Menu
+    //////////////////////////////////////////////////////////////////////////////////
+    if ($('#viewsMenu').children().length > 0) {
+      $.contextMenu({
+        selector: '#viewsButton',
+        trigger: "hover",
+        items: $.contextMenu.fromMenu($('#viewsMenu')),
+        zIndex: 10,
+        className: "viewMenuLi"
+      });
+    }
+
+    $(".viewMenuLi").each(function (i, obj) {
+      $(obj).children().each(function(i, obj) {
+        var view = $(this).text();
+        if (view !== "None") {
+          $(this).attr('title', molochViews[view].expression);
+        }
+      });
+    });
+
+  //////////////////////////////////////////////////////////////////////////////////
+  } // End if ($.contextMenu)
 
   //////////////////////////////////////////////////////////////////////////////////
   // startDate/stopDate
@@ -1104,7 +1036,7 @@ function handleUrlParams() {
     $("#expression").val("");
   }
 
-  initialDisplayLength = urlParams.iDisplayLength || 100;
+  initialDisplayLength = urlParams.length || urlParams.iDisplayLength || 100;
   $("#graphSize").val(String(initialDisplayLength));
   $("#sessions_length").val(String(initialDisplayLength));
 
@@ -1340,8 +1272,8 @@ function buildParams(params) {
 
   window.document.title = title;
 
-  if (typeof sessionsTable === 'undefined') {
-    params.push({name: "iDisplayLength", value: initialDisplayLength});
+  if (typeof sessionsTable === 'undefined' && typeof initialDisplayLength !== 'undefined') {
+    params.push({name: "length", value: initialDisplayLength});
   }
 
   return params;

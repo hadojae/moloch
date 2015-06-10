@@ -26,8 +26,8 @@ if [ "$#" -gt 0 ]; then
 fi
 
 
-ES=1.4.4
-NODEJS=0.10.37
+ES=1.5.2
+NODEJS=0.10.38
 INSTALL_DIR=$PWD
 
 if [ "$(id -u)" != "0" ]; then
@@ -65,7 +65,7 @@ which java
 JAVA_VAL=$?
 
 if [ $JAVA_VAL -ne 0 ]; then
-    echo -n "java command not found, real Java 7 is recommended for large install, however would you like to install openjdk 7 now? [yes] "
+    echo -n "java command not found, real Java 8 is recommended for large install, however would you like to install openjdk 7 now? [yes] "
     read INSTALLJAVA
     if [ -n "$INSTALLJAVA" -a "x$INSTALLJAVA" != "xyes" ]; then 
         echo "Install java and try again"
@@ -173,6 +173,10 @@ $MAKE install
 ./configure --prefix=${TDIR}
 $MAKE install
 
+# William likes the links so easier to find in ps
+ln -s $TDIR/bin/node $TDIR/bin/node-viewer
+ln -s $TDIR/bin/node $TDIR/bin/node-wise
+
 if [ "x$http_proxy" != "x" ]; then
     ${TDIR}/bin/npm config set proxy $http_proxy
     echo "Because http_proxy is set ($http_proxy) setting npm proxy"
@@ -264,9 +268,6 @@ cd ${TDIR}/viewer
 
 echo "MOLOCH: Starting viewer and capture"
 cd ${TDIR}/bin
-# William likes the links so easier to find in ps
-ln -s $TDIR/bin/node $TDIR/bin/node-viewer
-ln -s $TDIR/bin/node $TDIR/bin/node-wise
 nohup ./run_viewer.sh &
 nohup ./run_capture.sh &
 
