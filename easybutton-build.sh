@@ -196,5 +196,3 @@ if [ $? -ne 0 ]; then
   echo "MOLOCH: $MAKE failed"
   exit 1
 fi
-
-exit 0
