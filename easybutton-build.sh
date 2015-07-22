@@ -138,8 +138,6 @@ else
 fi
 
 if [ $DOPFRING -eq 1 ]; then
-<<<<<<< HEAD
-=======
     # pfring
     echo "MOLOCH: Building libpcap with pfring";
     if [ ! -f "PF_RING-$PFRING.tar.gz" ]; then
@@ -152,7 +150,6 @@ if [ $DOPFRING -eq 1 ]; then
       echo "MOLOCH: pfring failed to build"
       exit 1
     fi
->>>>>>> 8751c4420c19b744e208806104d74f6fcaf0939b
 
     PFRINGDIR=CHANGEME
     PCAPDIR=CHANGEME
