@@ -15,11 +15,6 @@
             "lp" : 1385396821,
             "a2" : "192.30.252.130",
             "ss" : 1,
-            "ta" : [
-               "node:test",
-               "protocol:tls",
-               "tcp"
-            ],
             "pa1" : 12,
             "fpd" : 1385396821013,
             "fs" : [],
@@ -66,7 +61,6 @@
             "as2" : "AS36459 GitHub, Inc.",
             "tlscipher-termcnt" : 1,
             "pa" : 20,
-            "tacnt" : 3,
             "sl" : 223,
             "fb1" : "1603010072010000",
             "a1" : "10.180.156.141",
@@ -93,6 +87,7 @@
                   "iCn" : [
                      "digicert high assurance ev ca-1"
                   ],
+                  "hash" : "d7:12:e9:69:65:dc:f2:36:c8:74:c7:03:7d:c0:b2:24:a9:3b:d2:33",
                   "sOn" : "GitHub, Inc.",
                   "sn" : "047fbe2e4bde0084d2caf8e3ecfe7058",
                   "diffDays" : 814
@@ -107,6 +102,7 @@
                   "iCn" : [
                      "digicert high assurance ev root ca"
                   ],
+                  "hash" : "db:c7:e9:0b:0d:a5:d8:8a:55:35:43:0e:eb:66:5d:07:78:59:e8:e8",
                   "sOn" : "DigiCert Inc",
                   "sn" : "0337b928347c60a6aec5adb1217f3860",
                   "diffDays" : 5114
@@ -165,10 +161,6 @@
             "lp" : 1385396821,
             "a2" : "192.30.252.130",
             "ss" : 1,
-            "ta" : [
-               "node:test",
-               "tcp"
-            ],
             "pa1" : 2,
             "fpd" : 1385396821236,
             "fs" : [],
@@ -190,14 +182,13 @@
             "as2" : "AS36459 GitHub, Inc.",
             "pa" : 3,
             "sl" : 0,
-            "tacnt" : 2,
             "a1" : "10.180.156.141",
             "db1" : 0,
             "mac2-term-cnt" : 2,
             "by1" : 108,
             "p2" : 443,
-            "mac1-term-cnt" : 1,
             "rir2" : "ARIN",
+            "mac1-term-cnt" : 1,
             "psl" : [
                70,
                82,

@@ -139,7 +139,7 @@ app.configure(function() {
   if (_accesslogfile) {
     _stream = fs.createWriteStream(_accesslogfile, {flags: 'a'});
   }
-  app.use(express.logger({ format: ':date :username \x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :res[content-length] bytes :response-time ms', stream: _stream }));
+  app.use(express.logger({ format: ':date :username \x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :status :res[content-length] bytes :response-time ms', stream: _stream }));
   app.use(express.compress());
   app.use(express.methodOverride());
   app.use("/", express.static(__dirname + '/public', { maxAge: 600 * 1000}));
@@ -883,7 +883,7 @@ function expireCheckDevice (nodes, stat, nextCb) {
   var doit = false;
   var minFreeSpaceG = 0;
   async.forEach(nodes, function(node, cb) {
-    var freeSpaceG = Config.getFull(node, "freeSpaceG", 301);
+    var freeSpaceG = Config.getFull(node, "freeSpaceG", "5%");
     if (freeSpaceG[freeSpaceG.length-1] === "%") {
       freeSpaceG = (+freeSpaceG.substr(0,freeSpaceG.length-1)) * 0.01 * stat.f_frsize/1024.0*stat.f_blocks/(1024.0*1024.0);
     }
@@ -1419,10 +1419,10 @@ app.get('/esstats.json', function(req, res) {
         searchesTime: node.indices.search.query_time_in_millis,
         heapSize: node.jvm.mem.heap_used_in_bytes,
         nonHeapSize: node.jvm.mem.non_heap_used_in_bytes,
-        cpu: node.process.cpu.percent,
+        cpu: (typeof node.process.cpu !== 'undefined') ? node.process.cpu.percent : 0,
         read: 0,
         write: 0,
-        load: node.os.load_average
+        load: (typeof node.os.load_average !== 'undefined') ? node.os.load_average : [0, 0, 0]
       });
 
       var oldnode = internals.previousNodeStats[0][nodes[n]];
@@ -1435,8 +1435,13 @@ app.get('/esstats.json', function(req, res) {
           newdisk[1] += node.fs.data[i].disk_write_size_in_bytes;
         }
 
-        stats[stats.length-1].read  = Math.ceil((newdisk[0] - olddisk[0])/(node.timestamp - oldnode.timestamp));
-        stats[stats.length-1].write = Math.ceil((newdisk[1] - olddisk[1])/(node.timestamp - oldnode.timestamp));
+        var read = Math.ceil((newdisk[0] - olddisk[0])/(node.timestamp - oldnode.timestamp));
+        var write = Math.ceil((newdisk[1] - olddisk[1])/(node.timestamp - oldnode.timestamp));
+
+        if (!(isNaN(read) && isNaN(write))) {
+            stats[stats.length-1].read = read;
+            stats[stats.length-1].write = write;
+        }
       }
     }
 
@@ -4595,6 +4600,21 @@ if (Config.get("regressionTests")) {
     res.send("{}");
   });
 }
+
+app.use(function(req,res) {
+  res.status(404);
+  // respond with html page
+  if (req.accepts('html')) {
+    return res.render('404', {
+      user: req.user,
+      title: makeTitle(req, 'Error'),
+      titleLink: 'errorLink'
+    });
+  }
+  res.type('txt').send('Page not found');
+
+});
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //// Cron Queries

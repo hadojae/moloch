@@ -2,7 +2,7 @@ doctype html
 html
   head
     title #{title.replace(/( *_-(expression|view)|_(expression|view))_/g, "")}
-    script(type='text/javascript', src='jquery-2.0.3.min.js')
+    script(type='text/javascript', src='jquery-2.1.4.min.js')
     script(type='text/javascript', src='jquery.dataTables.min.js')
     <!--[if IE]><script language="javascript" type="text/javascript" src="flot-0.7/excanvas.min.js"></script><![endif]-->
     script(type='text/javascript', src='flot-0.7/jquery.flot.min.js')
@@ -10,7 +10,7 @@ html
     script(type='text/javascript', src='flot-0.7/jquery.flot.resize.min.js')
     script(type='text/javascript', src='flot-0.7/jquery.flot.navigate.min.js')
     script(type='text/javascript', src='jquery.qtip.min.js')
-    script(type='text/javascript', src='d3.v3.js')
+    script(type='text/javascript', src='d3.min.js')
     script(type='text/javascript', src='common.js')
     block scripts
 
@@ -76,18 +76,22 @@ html
                   option(value=4380) Last 6 Months
                   option(value=-1) All
                   option(value=-2) Custom
+                  if (titleLink !== "connectionsLink")
+                    option(value=-3) Snap To
               input#expression(type='search', name='expression')
               span#searchStuffRight
                 button#searchButton(type="submit") Search
                 label#actionsButton Actions 
                   img#actionsButtonArrow(src="down-arrow.png")
       div#customDate
-        span Beginning Time:
+        span Beginning Time: 
         input#startDate(size=21)
-        span Ending Time:
+        span &nbsp;Ending Time: 
         input#stopDate(size=21)
+        | &nbsp;Delta Time: 
+        label#deltaDate
         input(type='checkbox', id='strictly', name='strictly', size=21)
-        label(for='strictly') Bounded By 
+        label(for='strictly') Results bounded
       block customMenu
           
     div.pageBody(id="pageBody-#{titleLink}")

@@ -232,7 +232,7 @@ function updateHealth(health)
   });
 }
 
-function updateString(name, string) 
+function updateString(name, string)
 {
   if (!string) {
     return $(name).hide();
@@ -284,6 +284,33 @@ function db2FieldType(dbField) {
 //////////////////////////////////////////////////////////////////////////////////
 // layout Functions
 //////////////////////////////////////////////////////////////////////////////////
+//
+function updateDelta()
+{
+  var extra = (molochSettings.timezone === "gmt"?" UTC":"");
+
+  var start = new Date($("#startDate").val() + extra);
+  if (start < 0) {start.setFullYear(start.getFullYear() + 100);}
+
+  var stop = new Date($("#stopDate").val() + extra);
+  if (stop < 0) {stop.setFullYear(stop.getFullYear() + 100);}
+
+  var delta = (stop - start)/1000;
+  $("#deltaDate").text("" +
+      Math.floor((delta / (24*60*60))) + " " +
+      twoDigitString(Math.floor((delta % (24*60*60))/(60*60))) + ":" +
+      twoDigitString(Math.floor((delta % (60*60))/60)) + ":" +
+      twoDigitString((delta % 60))
+   );
+}
+function updateSnapTo(data) {
+  if ($("#date").val() === "-3" && data.dbHisto.length !== 0) {
+    $("#startDate").val(dateString(data.dbHisto[0][0]/1000, ' '));
+    $("#stopDate").val(dateString(Math.ceil(data.dbHisto[data.dbHisto.length-1][0]/1000.0) + data.interval, ' '));
+    updateDelta();
+  }
+}
+
 function expressionResize() {
   $("#expression").width($("#nav").width() - ($("#logo").width() + $("#searchStuffRight").outerWidth(true) + $("#searchStuffLeft").outerWidth(true) - 2));
 }
@@ -311,6 +338,12 @@ $(document).ready(function() {
   $('#date').change(function() {
     var hours = parseInt($("#date").val(), 10);
     if (hours === -2) {
+      updateDelta();
+      $("#customDate").show();
+    } else if (hours === -3) {
+      var data = $("#sessionGraph").data("molochGraphData");
+      updateSnapTo(data);
+      updateDelta();
       $("#customDate").show();
     } else {
       if (hours !== -1) {
@@ -423,7 +456,7 @@ $(document).ready(function() {
     } else {
       $("#actions-message").hide();
     }
-    
+
     if (options.input) {
       $("#actions-input-div").show();
       $("label[for='actions-input']").html(options.input);
@@ -948,7 +981,7 @@ $(document).ready(function() {
           items[key] = {name: name,
                          url: result};
         }
-         
+
         return rightClickCallback(e, items);
       }
     });
@@ -1001,6 +1034,7 @@ $(document).ready(function() {
   //////////////////////////////////////////////////////////////////////////////////
   // startDate/stopDate
   //////////////////////////////////////////////////////////////////////////////////
+  $('#startDate,#stopDate').keyup(updateDelta);
   $('#startDate,#stopDate').keypress(function (e) {
     if ((e.keyCode ? e.keyCode : e.which) === 13) {
       $('#searchForm').submit();
@@ -1063,7 +1097,7 @@ function handleUrlParams() {
 
     $("#startDate").val(dateString(urlParams.startTime, ' '));
     $("#stopDate").val(dateString(urlParams.stopTime, ' '));
-    $("#date").val("-2");
+    $("#date").val(urlParams.date || "-2");
   } else if (urlParams.centerTime && urlParams.timeWindow) {
     var ct;
     if (! /^[0-9]+$/.test(urlParams.centerTime)) {
@@ -1080,7 +1114,7 @@ function handleUrlParams() {
 
     $("#startDate").val(dateString(urlParams.startTime, ' '));
     $("#stopDate").val(dateString(urlParams.stopTime, ' '));
-    $("#date").val("-2");
+    $("#date").val(urlParams.date || "-2");
   } else if ($("#date").val() === -1) {
     $("#startDate").val(dateString(0, ' '));
     $("#stopDate").val(dateString(new Date()/1000, ' '));
@@ -1227,7 +1261,9 @@ function setSessionStopTime (t) {
 
 function addDateParams(params) {
   if ($("#date").length) {
-    if ($("#date").val() === "-2") {
+    var val = $("#date").val();
+    if (val.match(/^(-2|-3)/)) {
+      updateDelta();
       $("#customDate").show();
       /* Date madness because of firefox on windows */
       var extra = (molochSettings.timezone === "gmt"?" UTC":"");
@@ -1241,7 +1277,12 @@ function addDateParams(params) {
       d = new Date($("#stopDate").val() + extra);
       if (d < 0) {d.setFullYear(d.getFullYear() + 100);}
       params.push({name:'stopTime', value:d/1000});
-    } else if ($("#date").val()) {
+
+      if (val === "-3") {
+        params.push({name:'date', value:$("#date").val()});
+      }
+
+    } else if (val) {
       $("#customDate").hide();
       params.push({name:'date', value:$("#date").val()});
     }
@@ -1289,6 +1330,11 @@ function updateGraph(allGraphData, graphId) {
   if (!allGraphData) {
     return;
   }
+
+  if (graphId === "#sessionGraph") {
+    updateSnapTo(allGraphData);
+  }
+
   $(graphId).data("molochGraphData", allGraphData);
   drawGraph($('#sessionGraphSelect').val(), graphId);
 }

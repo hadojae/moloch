@@ -9,12 +9,29 @@
 =======
 0.12.0 2015/06/XX
   - NOTICE: libcurl (>= 7.21.7) is now required, sorry
+  - NOTICE: db.pl upgrade is required
+  - NOTICE: duplicate items in available both in tags and elsewhere have been 
+            removed from tags for future data
   - capture - http module rewritten to use libcurl, woot!
   - capture/s3 - S3 traffic now sent over https
   - viewer - upgraded to DataTables 1.10.7 (issue #379)
   - viewer - add search to files tab (issue #70)
   - viewer - handle older indexes without bytes/databytes/packets 
              per src/dst (issue #396)
+  - viewer - upgrade D3 to 3.5.5 and switch to min version
+  - viewer - upgrade jquery to 2.1.4
+  - db - New rm-node command to delete from ES nodes that are no longer active
+  - capture - cert.hash is sha1 hash for SSL certificate (issue #388)
+  - viewer - New snapto time search that uses current query result for future
+             queries (issue #398)
+  - capture - Removed most tags items
+  - viewer - Delta Time display (issue #398)
+  - capture - pcapWriteMethod defaults to thread-direct now
+  - viewer - freeSpaceG defaults to 5% now
+  - viewer - 404 page and status code logged (issue #397)
+  - easybutton - ES 1.6.1
+  - easybutton - build curl with --without-librtmp (issue #403)
+  - easybutton - mirror sourceforge downloads for now (issue #406)
 
 0.11.5 2015/06/02
 >>>>>>> 10aa6fcea20e1533565c757cda387d385e4efc00

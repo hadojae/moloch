@@ -138,6 +138,21 @@ else
 fi
 
 if [ $DOPFRING -eq 1 ]; then
+<<<<<<< HEAD
+=======
+    # pfring
+    echo "MOLOCH: Building libpcap with pfring";
+    if [ ! -f "PF_RING-$PFRING.tar.gz" ]; then
+#      wget -O PF_RING-$PFRING.tar.gz http://sourceforge.net/projects/ntop/files/PF_RING/PF_RING-$PFRING.tar.gz/download
+      wget http://molo.ch/PF_RING-$PFRING.tar.gz
+    fi
+    tar zxf PF_RING-$PFRING.tar.gz
+    (cd PF_RING-$PFRING; $MAKE)
+    if [ $? -ne 0 ]; then
+      echo "MOLOCH: pfring failed to build"
+      exit 1
+    fi
+>>>>>>> 8751c4420c19b744e208806104d74f6fcaf0939b
 
     PFRINGDIR=CHANGEME
     PCAPDIR=CHANGEME
@@ -151,7 +166,8 @@ fi
 
 # libnids
 if [ ! -f "libnids-$NIDS.tar.gz" ]; then
-  wget http://downloads.sourceforge.net/project/libnids/libnids/$NIDS/libnids-$NIDS.tar.gz
+#  wget http://downloads.sourceforge.net/project/libnids/libnids/$NIDS/libnids-$NIDS.tar.gz
+  wget http://molo.ch/libnids-$NIDS.tar.gz
 fi
 
 if [ ! -f "libnids-$NIDS/src/libnids.a" ]; then
@@ -175,7 +191,7 @@ fi
 
 if [ ! -f "curl-$CURL/lib/.libs/libcurl.a" ]; then
   tar zxf curl-$CURL.tar.gz
-  ( cd curl-$CURL; ./configure --disable-ldap --disable-ldaps --without-libidn; $MAKE)
+  ( cd curl-$CURL; ./configure --disable-ldap --disable-ldaps --without-libidn --without-librtmp; $MAKE)
   if [ $? -ne 0 ]; then
     echo "MOLOCH: $MAKE failed"
     exit 1

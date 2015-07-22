@@ -26,7 +26,7 @@ if [ "$#" -gt 0 ]; then
 fi
 
 
-ES=1.5.2
+ES=1.6.1
 NODEJS=0.10.38
 INSTALL_DIR=$PWD
 
@@ -111,7 +111,20 @@ if [ "x$https_proxy" != "x" ]; then
     sleep 1
 fi
 
+<<<<<<< HEAD
 PFRING="--pfring"
+=======
+if [ -z $USEPFRING ]; then
+	echo -n "Use pfring? ('yes' enables) [no] "
+	read USEPFRING
+fi
+PFRING=""
+if [ -n "$USEPFRING" -a "x$USEPFRING" = "xyes" ]; then 
+    echo "MOLOCH - Using pfring - Make sure to install the kernel modules"
+    sleep 1
+    PFRING="--pfring"
+fi
+>>>>>>> 8751c4420c19b744e208806104d74f6fcaf0939b
 
 # Building thirdparty libraries and moloch
 echo ./easybutton-build.sh --dir "$TDIR" $PFRING
@@ -219,7 +232,16 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+<<<<<<< HEAD
 read ESMEM
+=======
+
+
+if [ -z $ESMEM ]; then
+	echo -n "Memory to give to elasticsearch, box MUST have more then this available: [512M] "
+	read ESMEM
+fi
+>>>>>>> 8751c4420c19b744e208806104d74f6fcaf0939b
 if [ -z $ESMEM ]; then ESMEM="512M"; fi
 
 echo "MOLOCH: Copying single-host config files"
@@ -268,11 +290,12 @@ echo "MOLOCH: Adding user admin/admin"
 cd ${TDIR}/viewer
 ../bin/node addUser.js -c ../etc/config.ini admin "Admin" admin -admin
 
-echo "MOLOCH: Starting viewer and capture"
-cd ${TDIR}/bin
-nohup ./run_viewer.sh &
-nohup ./run_capture.sh &
-
+if [ -z $DONOTSTART ]; then
+	echo "MOLOCH: Starting viewer and capture"
+	cd ${TDIR}/bin
+	nohup ./run_viewer.sh &
+	nohup ./run_capture.sh &
+fi
 
 HOSTNAME=`hostname`
 echo "MOLOCH: Complete use https://$HOSTNAME:8005 to access.  You should also make the run_* scripts in ${TDIR}/bin run on start up and look at the config files in ${TDIR}/etc"

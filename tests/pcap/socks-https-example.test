@@ -16,12 +16,6 @@
             "sockspo" : 443,
             "a2" : "10.180.156.249",
             "ss" : 1,
-            "ta" : [
-               "node:test",
-               "protocol:socks",
-               "protocol:tls",
-               "tcp"
-            ],
             "pa1" : 17,
             "fpd" : 1386004472572,
             "fs" : [],
@@ -77,7 +71,6 @@
             "fp" : 1386004472,
             "tlscipher-termcnt" : 1,
             "pa" : 30,
-            "tacnt" : 4,
             "sl" : 57,
             "fb1" : "040101bb5db8d877",
             "a1" : "10.180.156.185",
@@ -252,6 +245,7 @@
                   "iCn" : [
                      "digicert high assurance ca-3"
                   ],
+                  "hash" : "d8:af:99:8d:b5:e0:42:a7:b4:7b:6d:41:62:75:00:a7:f7:ed:96:5c",
                   "sOn" : "EdgeCast Networks, Inc.",
                   "sn" : "062d488986c9a6d7f94901c2b5906882",
                   "diffDays" : 1164
@@ -266,13 +260,14 @@
                   "iCn" : [
                      "digicert high assurance ev root ca"
                   ],
+                  "hash" : "42:85:78:55:fb:0e:a4:3f:54:c9:91:1e:30:e7:79:1d:8c:e8:27:05",
                   "sOn" : "DigiCert Inc",
                   "sn" : "0a5f114d035b179117d2efd4038c3f3b",
                   "diffDays" : 5113
                }
             ],
-            "assocksip" : "AS15133 EdgeCast Networks, Inc.",
             "p2" : 1080,
+            "assocksip" : "AS15133 EdgeCast Networks, Inc.",
             "gsocksip" : "USA",
             "mac1-term-cnt" : 1,
             "tlsver-termcnt" : 1,
@@ -340,12 +335,6 @@
             "sockspo" : 443,
             "a2" : "10.180.156.249",
             "ss" : 1,
-            "ta" : [
-               "node:test",
-               "protocol:socks",
-               "protocol:tls",
-               "tcp"
-            ],
             "pa1" : 17,
             "fpd" : 1386004475691,
             "fs" : [],
@@ -401,7 +390,6 @@
             "fp" : 1386004475,
             "tlscipher-termcnt" : 1,
             "pa" : 30,
-            "tacnt" : 4,
             "sl" : 69,
             "fb1" : "040101bb00000001",
             "a1" : "10.180.156.185",
@@ -575,6 +563,7 @@
                   "iCn" : [
                      "digicert high assurance ca-3"
                   ],
+                  "hash" : "d8:af:99:8d:b5:e0:42:a7:b4:7b:6d:41:62:75:00:a7:f7:ed:96:5c",
                   "sOn" : "EdgeCast Networks, Inc.",
                   "sn" : "062d488986c9a6d7f94901c2b5906882",
                   "diffDays" : 1164
@@ -589,6 +578,7 @@
                   "iCn" : [
                      "digicert high assurance ev root ca"
                   ],
+                  "hash" : "42:85:78:55:fb:0e:a4:3f:54:c9:91:1e:30:e7:79:1d:8c:e8:27:05",
                   "sOn" : "DigiCert Inc",
                   "sn" : "0a5f114d035b179117d2efd4038c3f3b",
                   "diffDays" : 5113
@@ -661,12 +651,6 @@
             "sockspo" : 443,
             "a2" : "10.180.156.249",
             "ss" : 1,
-            "ta" : [
-               "node:test",
-               "protocol:socks",
-               "protocol:tls",
-               "tcp"
-            ],
             "pa1" : 19,
             "fpd" : 1386004480852,
             "fs" : [],
@@ -725,7 +709,6 @@
             "fp" : 1386004480,
             "tlscipher-termcnt" : 1,
             "pa" : 33,
-            "tacnt" : 4,
             "sl" : 35,
             "fb1" : "0502000105010001",
             "a1" : "10.180.156.185",
@@ -900,6 +883,7 @@
                   "iCn" : [
                      "digicert high assurance ca-3"
                   ],
+                  "hash" : "d8:af:99:8d:b5:e0:42:a7:b4:7b:6d:41:62:75:00:a7:f7:ed:96:5c",
                   "sOn" : "EdgeCast Networks, Inc.",
                   "sn" : "062d488986c9a6d7f94901c2b5906882",
                   "diffDays" : 1164
@@ -914,13 +898,14 @@
                   "iCn" : [
                      "digicert high assurance ev root ca"
                   ],
+                  "hash" : "42:85:78:55:fb:0e:a4:3f:54:c9:91:1e:30:e7:79:1d:8c:e8:27:05",
                   "sOn" : "DigiCert Inc",
                   "sn" : "0a5f114d035b179117d2efd4038c3f3b",
                   "diffDays" : 5113
                }
             ],
-            "assocksip" : "AS15133 EdgeCast Networks, Inc.",
             "p2" : 1080,
+            "assocksip" : "AS15133 EdgeCast Networks, Inc.",
             "gsocksip" : "USA",
             "mac1-term-cnt" : 1,
             "tlsver-termcnt" : 1,
