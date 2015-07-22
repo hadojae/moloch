@@ -65,13 +65,10 @@ which java
 JAVA_VAL=$?
 
 if [ $JAVA_VAL -ne 0 ]; then
-<<<<<<< HEAD
+
     echo -n "java command not found, real Java 8 is recommended for large install, however would you like to install openjdk 7 now? [yes] "
-    read INSTALLJAVA
-=======
-    echo -n "java command not found, real Java 7 is recommended for large install, we are going to install it now."
     INSTALLJAVA="yes"
->>>>>>> dccf069129b94894b01453696aee3436215c9135
+
     if [ -n "$INSTALLJAVA" -a "x$INSTALLJAVA" != "xyes" ]; then 
         echo "Install java and try again"
         exit
