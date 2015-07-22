@@ -108,9 +108,8 @@ if [ "x$https_proxy" != "x" ]; then
     sleep 1
 fi
 
-<<<<<<< HEAD
 PFRING="--pfring"
-=======
+
 if [ -z $USEPFRING ]; then
 	echo -n "Use pfring? ('yes' enables) [no] "
 	read USEPFRING
@@ -121,7 +120,6 @@ if [ -n "$USEPFRING" -a "x$USEPFRING" = "xyes" ]; then
     sleep 1
     PFRING="--pfring"
 fi
->>>>>>> 8751c4420c19b744e208806104d74f6fcaf0939b
 
 # Building thirdparty libraries and moloch
 echo ./easybutton-build.sh --dir "$TDIR" $PFRING
@@ -229,16 +227,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-<<<<<<< HEAD
 read ESMEM
-=======
-
-
-if [ -z $ESMEM ]; then
-	echo -n "Memory to give to elasticsearch, box MUST have more then this available: [512M] "
-	read ESMEM
-fi
->>>>>>> 8751c4420c19b744e208806104d74f6fcaf0939b
 if [ -z $ESMEM ]; then ESMEM="512M"; fi
 
 echo "MOLOCH: Copying single-host config files"
