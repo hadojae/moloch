@@ -138,18 +138,18 @@ else
 fi
 
 if [ $DOPFRING -eq 1 ]; then
-    # pfring
-    echo "MOLOCH: Building libpcap with pfring";
-    if [ ! -f "PF_RING-$PFRING.tar.gz" ]; then
+#   pfring
+    echo "MOLOCH: Building libpcap with existing pfring";
+#    if [ ! -f "PF_RING-$PFRING.tar.gz" ]; then
 #      wget -O PF_RING-$PFRING.tar.gz http://sourceforge.net/projects/ntop/files/PF_RING/PF_RING-$PFRING.tar.gz/download
-      wget http://molo.ch/PF_RING-$PFRING.tar.gz
-    fi
-    tar zxf PF_RING-$PFRING.tar.gz
-    (cd PF_RING-$PFRING; $MAKE)
-    if [ $? -ne 0 ]; then
-      echo "MOLOCH: pfring failed to build"
-      exit 1
-    fi
+#      wget http://molo.ch/PF_RING-$PFRING.tar.gz
+#    fi
+#    tar zxf PF_RING-$PFRING.tar.gz
+#    (cd PF_RING-$PFRING; $MAKE)
+#    if [ $? -ne 0 ]; then
+#      echo "MOLOCH: pfring failed to build"
+#      exit 1
+#    fi
 
     PFRINGDIR=CHANGEME
     PCAPDIR=CHANGEME
